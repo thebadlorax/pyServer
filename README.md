@@ -2,7 +2,7 @@
 this thing sucks ass lmao
 
 ## basic packet example
-https://cdn.discordapp.com/attachments/1151985787735396422/1333533283321122826/H38Xaoh.png?ex=67993d26&is=6797eba6&hm=3392cebef9f12b6435b9b4efbc7c6ca90b9b7749beef60bad8fc2068a980de12&
+<img width="1367" alt="explanation" src="https://github.com/user-attachments/assets/3ca2d534-dfd2-4648-b910-28572933d90d">
 
 ## how to use
 yeah
