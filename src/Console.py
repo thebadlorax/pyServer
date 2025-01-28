@@ -45,7 +45,7 @@ class Console:
         self.addMessage(message)
 
     def error(self, message: str) -> None:
-        self.addMessage(message + color.END, f"{color.RED}[ERROR")
+        self.addMessage(message + color.END, f"{color.RED + color.BOLD + color.UNDERLINE}[ERROR")
 
     def warning(self, message: str) -> None:
         self.addMessage(message + color.END, f"{color.YELLOW}[WARNING")
@@ -76,12 +76,12 @@ class Console:
 
         half_width = int(self.columns/2)
         for x in range(half_width-10): print(" ",end="")
-        print(self.banner, end="")
+        print(color.UNDERLINE + self.banner + color.END, end="")
         if self.intensive_logging_banner:
-            text = color.BOLD + color.UNDERLINE + "INTENSIVE LOGGGING" + color.END
+            intensive_logging_text = color.BOLD + color.UNDERLINE + "INTENSIVE LOGGGING" + color.END
             remaining_space = (half_width - len(self.banner)) + 9
             for x in range(remaining_space - len("INTENSIVE LOGGING")): print(" ", end="")
-            print(text,end="")
+            print(intensive_logging_text,end="")
         else:
             remaining_space = half_width - len(self.banner)
             for x in range(remaining_space+10): print(" ", end="")

@@ -55,7 +55,7 @@ class Server:
         while True:
             for conn in self._CONNECTIONS:
                 if(time.time() - conn.time >= DISCONNECT_TIME):
-                    self._CONSOLE.log(f'connection lost abruptly with client {conn.address[0]}')
+                    self._CONSOLE.warn(f'connection lost abruptly with client {conn.address[0]}')
                     conn.socket.close()
                     self._DEAD_CONNECTIONS.append(conn)
                     self._CONNECTIONS.remove(conn)
