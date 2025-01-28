@@ -19,7 +19,7 @@ class Client:
 
         self._OUTGOING_PACKETS: list[Packet] = []
 
-        self.INTENSIVE_LOGGING: bool = False
+        self.INTENSIVE_LOGGING: bool = True
 
         self._HEARTBEAT_INTERVAL: int = 3 # Must be less than Server#DISCONNECT_TIME
 

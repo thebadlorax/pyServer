@@ -1,4 +1,5 @@
 import time, os
+from dataclasses import dataclass
 
 class color:
    PURPLE = '\033[95m'
@@ -12,16 +13,23 @@ class color:
    UNDERLINE = '\033[4m'
    END = '\033[0m'
 
+@dataclass
+class Message:
+    text: str
+    colors: list[str]
+    extra: str
+    
+
 class Console:
     def __init__(self) -> None:
         self.messageLimit: int = 25
-        self.messages: list[str] = []
+        self.messages: list[Message] = []
         self.intensive_logging_banner: bool = True
         self.columns, self.rows = os.get_terminal_size(0)
         self.banner: str = ""
 
     def getPrefix(self) -> str:
-        return f"[{time.strftime('%X')}]"
+        return f"{time.strftime('%X')}"
 
     def newLine(self, count: int = 1) -> None:
         for i in range(count):
@@ -31,10 +39,17 @@ class Console:
         self.banner = text
         self.refresh()
 
-    def addMessage(self, message: str, extra: str = "") -> None:
-        if extra != "": extra = f'{extra}] - '
-        msg = f"{extra + self.getPrefix():25} {message}"
-        print(len(self.messages))
+    def formatMessage(self, message: Message) -> str:
+        colors = ""
+        for x in range(len(message.colors)): colors += message.colors[x]
+        msg = f"{colors}{self.getPrefix()}{'' if message.extra == '' else str(' - [' + message.extra + ']')}: {message.text}{color.END}"
+        return msg
+
+
+    def addMessage(self, message: str, extra: str = "", colors: list[str] = []) -> None:
+        #if extra != "": extra = f'{extra}] - '
+        #msg = f"{extra + self.getPrefix():25} {message}"
+        msg = Message(message, colors, extra)
 
         if(len(self.messages) >= self.messageLimit): self.messages.pop(0) # remove oldest message
         self.messages.append(msg)
@@ -45,23 +60,23 @@ class Console:
         self.addMessage(message)
 
     def error(self, message: str) -> None:
-        self.addMessage(message + color.END, f"{color.RED + color.BOLD + color.UNDERLINE}[ERROR")
+        self.addMessage(message, "ERROR", [color.BOLD, color.RED])
 
     def warning(self, message: str) -> None:
-        self.addMessage(message + color.END, f"{color.YELLOW}[WARNING")
+        self.addMessage(message, "WARNING", [color.YELLOW])
 
     def warn(self, message: str) -> None:
         self.warning(message)
 
     def messageFromServer(self, message: str) -> None:
-        self.addMessage(message, "[SERVER")
+        self.addMessage(message, "SERVER")
 
     def messageFromClient(self, message: str) -> None:
-        self.addMessage(message, "[CLIENT")
+        self.addMessage(message, "CLIENT")
 
     def printMessages(self) -> None:
         for m in self.messages:
-            print(m)
+            print(self.formatMessage(m))
 
     def clear(self) -> None:
         os.system("clear")

@@ -28,7 +28,7 @@ class Server:
         self._CONNECTIONS: list[Connection] = []
         self._DEAD_CONNECTIONS: list[Connection] = [] # dead connections are connections that have disconnected but i want to know they are returning instead of a new connection
 
-        self.INTENSIVE_LOGGING: bool = False
+        self.INTENSIVE_LOGGING: bool = True
 
         self.HOST: str = HOST
         self.PORT: int = PORT
