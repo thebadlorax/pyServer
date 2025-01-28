@@ -18,6 +18,7 @@ class Console:
         self.messages: list[str] = []
         self.intensive_logging_banner: bool = True
         self.columns, self.rows = os.get_terminal_size(0)
+        self.banner: str = ""
 
     def getPrefix(self) -> str:
         return f"[{time.strftime('%X')}]"
@@ -25,6 +26,10 @@ class Console:
     def newLine(self, count: int = 1) -> None:
         for i in range(count):
             print("")
+
+    def setBanner(self, text: str) -> None:
+        self.banner = text
+        self.refresh()
 
     def addMessage(self, message: str, extra: str = "") -> None:
         if extra != "": extra = f'{extra}] - '
@@ -67,8 +72,19 @@ class Console:
     def refresh(self) -> None:
         self.clear()
 
+
+
+        half_width = int(self.columns/2)
+        for x in range(half_width-10): print(" ",end="")
+        print(self.banner, end="")
         if self.intensive_logging_banner:
-            for x in range(int(self.columns/2)-1): print(" ",end="")
-            print(color.BOLD + "INTESIVE LOGGING" + color.END)
+            text = color.BOLD + color.UNDERLINE + "INTENSIVE LOGGGING" + color.END
+            remaining_space = (half_width - len(self.banner)) + 9
+            for x in range(remaining_space - len("INTENSIVE LOGGING")): print(" ", end="")
+            print(text,end="")
+        else:
+            remaining_space = half_width - len(self.banner)
+            for x in range(remaining_space+10): print(" ", end="")
+
 
         self.printMessages()

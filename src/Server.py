@@ -59,6 +59,7 @@ class Server:
                     conn.socket.close()
                     self._DEAD_CONNECTIONS.append(conn)
                     self._CONNECTIONS.remove(conn)
+                    self._UPDATE_BANNER()
             time.sleep(0.5) # not needed but i like not wasting compute
 
     def _SEND_PACKET(self, connection: socket.socket, packet: Packet) -> None: # maybe make this return boolean of if sent
@@ -80,6 +81,8 @@ class Server:
         self.DC_D = self._CONFIGURE_DAEMON(self._CHECK_IF_CONNECTION_IS_ALIVE) # start processing dead clients
         self.DC_D.start()
 
+        self._UPDATE_BANNER()
+
         with self._SOCKET as s:
             try:
                 s.bind((self.HOST, self.PORT))
@@ -94,12 +97,15 @@ class Server:
                 self._CONNECTIONS.append(Connection(conn, addr, time.time()))
                 start_new_thread(self._HANDLE_INCOMING, (connection,))
 
-        
+    def _UPDATE_BANNER(self):
+        self._CONSOLE.setBanner(f"Connection Count: {len(self._CONNECTIONS)}")
             
     def _HANDLE_INCOMING(self, conn: Connection):
+        self._UPDATE_BANNER()
         with conn.socket:
             self._CONSOLE.log(f"new incoming connection: {conn.address[0]}")
             self._SEND_PACKET(conn.socket, MessagePacket(f"Welcome, heartbeat cutoff is set to {self._DISCONNECT_TIME} seconds."))
+            self._SEND_PACKET(conn.socket, MessagePacket(f"You are here with {len(self._CONNECTIONS)-1} others."))
             if self.INTENSIVE_LOGGING: self._SEND_PACKET(conn.socket, MessagePacket("INTENSIVE LOGGING IS ENABLED SERVERSIDE"))
 
             while True:

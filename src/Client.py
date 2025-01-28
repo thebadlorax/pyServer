@@ -19,7 +19,7 @@ class Client:
 
         self._OUTGOING_PACKETS: list[Packet] = []
 
-        self.INTENSIVE_LOGGING: bool = True
+        self.INTENSIVE_LOGGING: bool = False
 
         self._HEARTBEAT_INTERVAL: int = 3 # Must be less than Server#DISCONNECT_TIME
 
@@ -49,6 +49,7 @@ class Client:
             raise SystemExit
 
         self._CONSOLE.log(f"Connected to server - {self.HOST}")
+        self._CONSOLE.setBanner(f"Connected to {self.HOST}:{self.PORT}")
         self.addPacketToQueue(MessagePacket(f"Hello, my heartbeat interval is {self._HEARTBEAT_INTERVAL} seconds."))
         if self.INTENSIVE_LOGGING: self.addPacketToQueue(MessagePacket("INTENSIVE_LOGGING IS ENABLED CLIENTSIDE"))
 
